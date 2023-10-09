@@ -44,7 +44,7 @@ app.post('/api/login', (req, res) => {
 
     for (let user of users){
         if(username == user.username && password == user.password) {
-            let token = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn: '7d'});
+            let token = jwt.sign({ id: user.id, username: user.username }, secretKey, { expiresIn: '3m'});
             res.json({
                 success: true,
                 err: null,
@@ -75,16 +75,19 @@ app.get('/api/settings', jwtMW, (req, res) => {
     });
 });
 
-// app.get('/api/prices', jwtMW, (req, res) => {
-//     // console.log(req);
-//     res.json({
-//         success: true,
-//         myContent: 'This is the price $3.99'
-//     });
-// });
+app.get('/api/prices', jwtMW, (req, res) => {
+    res.json({
+        success: true,
+        myContent: 'This is the price $3.99'
+    });
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.use(function (err, req, res, next) {
